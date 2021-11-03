@@ -92,3 +92,4 @@ class User:
             Label(self.logf, text = "Password : ", font = ('', 20), pady = 5, padx = 5).grid(sticky = W)
             Entry(self.logf, textvariable = self.username, bd = 5, font = ('', 15), show='*').grid(row = 1, column = 1)
             Button(self.logf, text = " Login ", bd = 3, font = ('', 15), padx = 5, pady = 5, command = self.login).grid()
+            Button()            
