@@ -1,19 +1,20 @@
+from tkinter import *
+from tkinter import ttk
 import random
 import time
 import sqlite3
-from tkinter import *
-from tkinter import ttk
 from tkinter import messagebox as msg
+from beaker.ext.google import db
 Item4 = 0
 
 # Create a new DB if dir is 404 @startup
 
-with sqlite3.connect('Users.db') as conn:
-    conn.cursor()
+with sqlite3.connect('Users.db') as db:
+    conn = db.cursor()
     
 conn.execute('CREATE TABLE IF NOT EXISTS user (username TEXT not NULL, password TEXT not NULL')
-conn.commit()
-conn.close()
+db.commit()
+db.close()
 
 # main
 class user:
