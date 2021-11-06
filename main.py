@@ -2,9 +2,9 @@ from tkinter import *
 from tkinter import ttk
 import random
 import time
+import datetime
 import sqlite3
 from tkinter import messagebox as msg
-from beaker.ext.google import db
 Item4 = 0
 
 # Create a new DB if dir is 404 @startup
@@ -12,7 +12,7 @@ Item4 = 0
 with sqlite3.connect('Users.db') as db:
     conn = db.cursor()
     
-conn.execute('CREATE TABLE IF NOT EXISTS user (username TEXT not NULL, password TEXT not NULL')
+conn.execute('CREATE TABLE IF NOT EXISTS user (username TEXT NOT NULL, password TEXT NOT NULL)')
 db.commit()
 db.close()
 
@@ -53,7 +53,7 @@ class user:
     # user++
     def newu(self):
         # Establish connection
-        with sqlite3.connect('User.db') as db:
+        with sqlite3.connect('Users.db') as db:
             conn = db.cursor()
             
         # username Exists
@@ -66,6 +66,7 @@ class user:
             self.log()
         # Create new account
         insert = 'INSERT INTO user(username, password) VALUES(?,?)'
+        conn.execute(insert,[(self.new_username.get()),(self.new_password.get())])
         db.commit()
         
     # Frame Packing Methods
@@ -77,7 +78,7 @@ class user:
         self.logf.pack()
     
     def cr(self):
-        self.new_user.set('')
+        self.new_username.set('')
         self.new_password.set('')
         self.logf.pack_forget()
         self.head['text'] = 'Register'
@@ -91,7 +92,7 @@ class user:
         Label(self.logf, text = "Username : ", font = ('open sans', 20), pady = 5, padx = 5).grid(sticky = W)
         Entry(self.logf, textvariable = self.username, bd = 5, font = ('open sans', 15)).grid(row = 0, column = 1)
         Label(self.logf, text = "Password : ", font = ('open sans', 20), pady = 5, padx = 5).grid(sticky = W)
-        Entry(self.logf, textvariable = self.username, bd = 5, font = ('open sans', 15), show='*').grid(row = 1, column = 1)
+        Entry(self.logf, textvariable = self.password, bd = 5, font = ('open sans', 15), show='*').grid(row = 1, column = 1)
         Button(self.logf, text = " Login ", bd = 3, font = ('open sans', 15), padx = 5, pady = 5, command = self.login).grid()
         Button(self.logf,text = " Register ", bd = 3, font = ('open sans', 15), padx =5, pady = 5, command = self.cr).grid(row = 2, column =1 )
         self.logf.pack()
@@ -102,7 +103,7 @@ class user:
         Label(self.crf, text = 'Password : ', font = ('open sans', 20), pady = 5 , padx = 5).grid(sticky = W)
         Entry(self.crf, textvariable = self.new_password, bd = 5, font = ('open sans', 15), show = "*").grid(row = 1 , column = 1)
         Button(self.crf, text = " Register ", bd = 3, font = ('open sans', 15), padx = 5, pady = 5, command = self.newu).grid()
-        Button(self.crf,text = " Login ", bd = 3, font = ('open sans', 15), padx =5, pady = 5, command = self.cr).grid(row = 2, column =1 )            
+        Button(self.crf,text = " Go to Login ", bd = 3, font = ('open sans', 15), padx =5, pady = 5, command = self.log).grid(row = 2, column =1 )            
         
 
 # Travel class
@@ -296,17 +297,17 @@ class travel:
                 Km.set("0")
             elif var2.get() == 1 and varl1.get() != "" and varl2.get() != "":
                 self.txtKm.configure(state=NORMAL)
-                if varl1.get() == "BleckerStreet":
-                    switch ={"BrownAvenue": 10,"NorthAvenue": 8,"BoggessStreet":6,"BleckerStreet": 0}
+                if varl1.get() == "A":
+                    switch ={"B": 10,"C": 8,"D":6,"A": 0}
                     Km.set(switch[varl2.get()])
-                elif varl1.get() == "BrownAvenue":
-                    switch ={"BrownAvenue": 0,"NorthAvenue": 2,"BoggessStreet":5,"BleckerStreet": 10}
+                elif varl1.get() == "B":
+                    switch ={"B": 0,"C": 2,"D":5,"A": 10}
                     Km.set(switch[varl2.get()])
-                elif varl1.get() == "NorthAvenue":
-                    switch ={"BrownAvenue": 2,"NorthAvenue": 0,"BoggessStreet":3,"BleckerStreet": 8}
+                elif varl1.get() == "C":
+                    switch ={"B": 2,"C": 0,"D":3,"A": 8}
                     Km.set(switch[varl2.get()])
-                elif varl1.get() == "BoggessStreet":
-                    switch ={"BrownAvenue": 5,"NorthAvenue": 3,"BoggessStreet":0,"BleckerStreet": 6}
+                elif varl1.get() == "D":
+                    switch ={"B": 5,"C": 3,"D":0,"A": 6}
                     Km.set(switch[varl2.get()])        
 
         
@@ -485,7 +486,7 @@ class travel:
         self.lblPickup.grid(row=0,column=0,sticky=W)
 
         self.cboPickup =ttk.Combobox(TravelFrame, textvariable = varl1 , state='readonly', font=('arial',20,'bold'), width=14)
-        self.cboPickup['value']=('','BleckerStreet','BoggessStreet','NorthAvenue','BrownAvenue')
+        self.cboPickup['value']=('','A','D','C','B')
         self.cboPickup.current(0)
         self.cboPickup.grid(row=0,column=1)
 
@@ -494,7 +495,7 @@ class travel:
         self.lblDrop.grid(row=1,column=0,sticky=W)
 
         self.cboDrop =ttk.Combobox(TravelFrame, textvariable = varl2 , state='readonly', font=('arial',20,'bold'), width=14)
-        self.cboDrop['value']=('','BrownAvenue','NorthAvenue','BleckerStreet','BoggessStreet')
+        self.cboDrop['value']=('','B','C','A','D')
         self.cboDrop.current(0)
         self.cboDrop.grid(row=1,column=1)
 
@@ -586,7 +587,7 @@ class travel:
  
 
         
-if __name__=='__zola__':
+if __name__=='__main__':
     root = Tk()
 
     # Media Queries
